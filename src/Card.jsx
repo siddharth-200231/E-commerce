@@ -3,7 +3,7 @@ import React from 'react';
 function Card({ title, price, category, description, image }) {
   return (
     <div className="max-w-xs rounded overflow-hidden shadow-md p-3 m-3 bg-white border border-gray-200">
-      <img className="w-full h-24 object-contain" src={image} alt={title} />
+      <img className="w-full h-28 object-contain" src={image} alt={title} />
       <div className="p-3">
         <div className="font-bold text-lg mb-1 truncate">{title}</div>
         <p className="text-gray-600 text-sm mb-2 truncate">{description}</p>
