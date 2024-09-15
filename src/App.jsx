@@ -45,16 +45,17 @@ function App() {
       <nav className='flex p-4 mb-4 text-lg font-medium justify-center bg-sky-100 shadow-md'>
   <Link
     to="/products"
-    className="text-gray-700 px-4 py-2 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all duration-200"
+    className="text-gray-700 px-4 py-2 rounded-lg hover:bg-blue-200 hover:text-blue-700 transition-all duration-200"
   >
     Products
   </Link>
   <Link
     to="/about"
-    className="text-gray-700 px-4 py-2 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all duration-200"
+    className="text-gray-700 px-4 py-2 rounded-lg hover:bg-blue-200 hover:text-blue-700 transition-all duration-200"
   >
     About
   </Link>
+  <Link to="/login" className='py-1 px-4 hover:bg-cyan-800 bg-blue-900 text-white rounded ml-auto text-center '>Login</Link>
 </nav>
 
 
