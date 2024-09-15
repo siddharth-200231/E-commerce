@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Card from './Card';
-import { UserContext } from './Context'; // Ensure the path to your context file is correct
+import { UserContext } from './Context'; // Ensure the path to your context 
 
 function Cards() {
   const { data } = useContext(UserContext); // Destructure `data` from context

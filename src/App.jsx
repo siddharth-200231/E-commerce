@@ -2,6 +2,9 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Cards from './Cards';
 import { UserContext } from './Context';
+import { Routes,Route } from 'react-router-dom';
+import Products from './Products';
+import About from './About';
 
 function App() {
   const { data } = useContext(UserContext);
@@ -13,7 +16,7 @@ function App() {
 
   return (
     <div className='flex h-screen w-screen'>
-      <nav className='w-full sm:w-1/4 md:w-1/5 lg:w-1/6 h-full bg-gray-100 p-5 shadow-md'>
+      <nav className='w-[15%] p-3'>
         <div className='flex flex-col items-start space-y-4'>
           <Link 
             to="/create" 
@@ -39,8 +42,29 @@ function App() {
       </nav>
 
       <main className='flex-1 p-4 overflow-auto'>
-        <Cards />
-      </main>
+      <nav className='flex p-4 mb-4 text-lg font-medium justify-center bg-sky-100 shadow-md'>
+  <Link
+    to="/products"
+    className="text-gray-700 px-4 py-2 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all duration-200"
+  >
+    Products
+  </Link>
+  <Link
+    to="/about"
+    className="text-gray-700 px-4 py-2 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all duration-200"
+  >
+    About
+  </Link>
+</nav>
+
+
+  <Routes>
+    <Route path='/products' element={<Products/>}></Route>
+    <Route path='/about' element={<About/>}></Route>
+  </Routes>
+ 
+</main>
+
     </div>
   );
 }
