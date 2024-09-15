@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+// Connect to MongoDB
+mongoose.connect("mongodb://localhost:27017/store").then(() => {
+    console.log("Connected to MongoDB successfully");
+}).catch((e) => {
+    console.log("Error connecting to MongoDB:", e.message);
+});
+
 // Create User Schema
 const UserSchema = new mongoose.Schema({
     name: {
