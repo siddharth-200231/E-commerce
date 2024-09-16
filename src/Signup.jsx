@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import the Link component from react-router-dom
 import axios from 'axios';
 
 const SignUp = () => {
@@ -120,12 +121,22 @@ const SignUp = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+          className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
           disabled={loading}
         >
           {loading ? 'Signing Up...' : 'Sign Up'}
         </button>
       </form>
+
+      {/* Already a User? Login Link */}
+      <div className="mt-6 text-center">
+        <p className="text-gray-700">
+          Already a user?{' '}
+          <Link to="/login" className="text-purple-600 hover:underline">
+            Login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
