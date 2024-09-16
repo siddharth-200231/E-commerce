@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const SignUp = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -27,23 +25,17 @@ const SignUp = () => {
     setFlashMessage(''); // Clear flash message before submitting
 
     try {
-      // Send the form data to the /register endpoint using Axios
-      const response = await axios.post('http://localhost:5000/register', {
-        name: formData.name,
+      // Send the form data to the /login endpoint using Axios
+      const response = await axios.post('http://localhost:5000/login', {
         email: formData.email,
         password: formData.password,
       });
 
-      if (response.status === 201) {
-        setFlashMessage('User registered successfully!');
-        setFormData({
-          name: '',
-          email: '',
-          password: '',
-          confirmPassword: ''
-        });
+      if (response.status === 200) {
+        setFlashMessage('Login successful!');
+        // Optionally, you can redirect the user or save the token to localStorage
       } else {
-        setFlashMessage('Error registering user. Please try again.');
+        setFlashMessage('Error logging in. Please check your credentials.');
       }
     } catch (error) {
       setFlashMessage('Error: ' + (error.response?.data?.message || error.message));
@@ -54,7 +46,7 @@ const SignUp = () => {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
       {/* Flash Message */}
       {flashMessage && (
@@ -64,22 +56,6 @@ const SignUp = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* Name Input */}
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="name">
-            Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
-        </div>
-
         {/* Email Input */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="email">
@@ -97,7 +73,7 @@ const SignUp = () => {
         </div>
 
         {/* Password Input */}
-        <div className="mb-4">
+        <div className="mb-6">
           <label className="block text-gray-700 mb-2" htmlFor="password">
             Password
           </label>
@@ -112,38 +88,22 @@ const SignUp = () => {
           />
         </div>
 
-        {/* Confirm Password Input */}
-        <div className="mb-6">
-          <label className="block text-gray-700 mb-2" htmlFor="confirmPassword">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            name="confirmPassword"
-            id="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
-        </div>
-
         {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
           disabled={loading}
         >
-          {loading ? 'Signing Up...' : 'Sign Up'}
+          {loading ? 'Logging In...' : 'Login'}
         </button>
       </form>
 
-      {/* Already a User? Login Link */}
+      {/* Not a User? Sign Up Link */}
       <div className="mt-6 text-center">
         <p className="text-gray-700">
-          Already a user?{' '}
-          <Link to="/login" className="text-purple-600 hover:underline">
-            Login
+          Not a user?{' '}
+          <Link to="/signup" className="text-purple-600 hover:underline">
+            Sign Up
           </Link>
         </p>
       </div>
@@ -151,4 +111,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;

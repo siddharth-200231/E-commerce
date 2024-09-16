@@ -1,17 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { Link, Routes, Route, useLocation } from 'react-router-dom';
-import { FaPlus, FaBox, FaInfoCircle, FaUserPlus, FaHome } from 'react-icons/fa';
+import { FaBars, FaTimes, FaBox, FaInfoCircle, FaUserPlus, FaHome } from 'react-icons/fa';
 import Products from './Products';
 import About from './About';
 import Signup from './Signup';
 import Home from './Home';
 import { UserContext } from './Context';
 import Cards from './Cards';
+import Login from './Login';
 
 function App() {
   const { data } = useContext(UserContext);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const location = useLocation(); // Get the current route
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
 
   // Extract unique categories including 'All'
   const categories = Array.isArray(data)
@@ -23,90 +25,96 @@ function App() {
     ? data
     : data.filter(item => item.category === selectedCategory);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className='flex flex-col h-screen w-screen'>
-      <nav className='w-full p-4 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg rounded-b-lg'>
-        <div className='flex justify-between items-center'>
-          {/* Add New Product Button */}
-          <Link
-            to="/create"
-            className='flex items-center py-2 px-4 border border-white text-white rounded-lg hover:bg-white hover:text-purple-600 transition-colors duration-200 shadow-md'
-          >
-            <FaPlus className="mr-2" />
-            Add New Product
-          </Link>
-
-          <div className="flex space-x-6">
-            <Link
-              to="/"
-              className="flex items-center text-white px-4 py-2 rounded-md hover:bg-white hover:text-purple-600 transition-transform duration-300 transform hover:scale-105"
-            >
-              <FaHome className="mr-2" />
-              Home
-            </Link>
-            <Link
-              to="/products"
-              className="flex items-center text-white px-4 py-2 rounded-md hover:bg-white hover:text-purple-600 transition-transform duration-300 transform hover:scale-105"
-            >
-              <FaBox className="mr-2" />
-              Products
-            </Link>
-            <Link
-              to="/about"
-              className="flex items-center text-white px-4 py-2 rounded-md hover:bg-white hover:text-purple-600 transition-transform duration-300 transform hover:scale-105"
-            >
-              <FaInfoCircle className="mr-2" />
-              About
-            </Link>
-          </div>
-
-          <Link
-            to="/signup"
-            className="flex items-center py-2 px-6 bg-white text-purple-600 rounded-full hover:bg-purple-600 hover:text-white transition-transform duration-300 transform hover:scale-105 shadow-md"
-          >
-            <FaUserPlus className="mr-2" />
-            Sign Up
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="w-full bg-white shadow-md p-4 fixed top-0 left-0 z-50 flex justify-between items-center">
+        <div className="flex items-center">
+          <button className="text-gray-800 md:hidden focus:outline-none" onClick={toggleSidebar}>
+            {isSidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+          <Link to="/" className="text-2xl font-bold text-gray-800 ml-4">
+            MyStore
           </Link>
         </div>
-      </nav>
+        <nav className="hidden md:flex space-x-8">
+          <Link to="/" className={`text-gray-700 hover:text-purple-600 transition-colors ${location.pathname === '/' && 'text-purple-600'}`}>
+            Home
+          </Link>
+          <Link to="/products" className={`text-gray-700 hover:text-purple-600 transition-colors ${location.pathname === '/products' && 'text-purple-600'}`}>
+            Products
+          </Link>
+          <Link to="/about" className={`text-gray-700 hover:text-purple-600 transition-colors ${location.pathname === '/about' && 'text-purple-600'}`}>
+            About
+          </Link>
+        </nav>
+        <Link to="/signup" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+          Sign Up
+        </Link>
+      </header>
 
-      <div className='flex-1 flex overflow-hidden'>
-        {/* Conditionally render the sidebar based on the route */}
-        {location.pathname === '/products' && (
-          <aside className='w-[20%] p-4 bg-white shadow-lg rounded-lg overflow-y-auto'>
-            <div className='flex flex-col items-start space-y-6'>
-              <hr className='w-full border-gray-300' />
-              <h1 className='text-xl font-semibold text-gray-900'>Category Filter</h1>
+      {/* Sidebar for mobile */}
+      <aside className={`fixed inset-y-0 left-0 bg-white shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform md:hidden w-64 z-40`}>
+        <div className="flex flex-col p-4 space-y-4">
+          <Link to="/" className={`text-gray-700 hover:text-purple-600 transition-colors ${location.pathname === '/' && 'text-purple-600'}`} onClick={toggleSidebar}>
+            Home
+          </Link>
+          <Link to="/products" className={`text-gray-700 hover:text-purple-600 transition-colors ${location.pathname === '/products' && 'text-purple-600'}`} onClick={toggleSidebar}>
+            Products
+          </Link>
+          <Link to="/about" className={`text-gray-700 hover:text-purple-600 transition-colors ${location.pathname === '/about' && 'text-purple-600'}`} onClick={toggleSidebar}>
+            About
+          </Link>
+        </div>
+      </aside>
 
-              <ul className='w-full space-y-3'>
-                {categories.length > 0 ? (
-                  categories.map((category, index) => (
-                    <li
-                      key={index}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`flex items-center text-gray-700 px-2 py-1 rounded-lg cursor-pointer transition-all duration-200 shadow-md ${selectedCategory === category ? 'bg-purple-500 text-white' : 'hover:bg-purple-500 hover:text-white'}`}
-                    >
-                      <span className={`block rounded-full w-3 h-3 mr-3 ${selectedCategory === category ? 'bg-white' : 'bg-blue-400'}`}></span>
-                      {category}
-                    </li>
-                  ))
-                ) : (
-                  <li className='text-gray-500 italic'>No categories available</li>
-                )}
-              </ul>
+      {/* Main content area */}
+      <main className="flex-1 container mx-auto mt-20 p-4 md:pl-20">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Cards products={filteredProducts} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </main>
+
+      {/* Footer */}
+      <footer className="w-full bg-gray-800 text-white py-8 mt-10">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h2 className="text-xl font-bold mb-4">MyStore</h2>
+            <p className="text-gray-400">
+              The best products at the best prices, delivered to your door.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold mb-4">Quick Links</h2>
+            <ul className="space-y-2">
+              <li><Link to="/" className="hover:text-purple-600">Home</Link></li>
+              <li><Link to="/products" className="hover:text-purple-600">Products</Link></li>
+              <li><Link to="/about" className="hover:text-purple-600">About</Link></li>
+              <li><Link to="/signup" className="hover:text-purple-600">Sign Up</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold mb-4">Follow Us</h2>
+            <div className="flex space-x-4">
+              <Link to="#" className="hover:text-purple-600"><FaFacebookF /></Link>
+              <Link to="#" className="hover:text-purple-600"><FaTwitter /></Link>
+              <Link to="#" className="hover:text-purple-600"><FaInstagram /></Link>
+              <Link to="#" className="hover:text-purple-600"><FaLinkedin /></Link>
             </div>
-          </aside>
-        )}
-
-        <main className='flex-1 p-4 overflow-auto'>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/products' element={<Cards products={filteredProducts} />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/signup' element={<Signup />} />
-          </Routes>
-        </main>
-      </div>
+          </div>
+        </div>
+        <div className="text-center text-gray-500 mt-8">
+          &copy; 2024 MyStore. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
